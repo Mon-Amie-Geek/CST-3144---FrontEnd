@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://unpkg.com/vue@2.7.14/dist/vue.min.js"></script>
+        <!--  
+        ##Decide whether to use Tailwind CSS or not##
+        <script src="https://cdn.tailwindcss.com"></script>
+        ##Way to host on Render -- To fix ##
+        <link rel="icon" type="image/x-icon" href="https://CST3144-Backend.onrender.com/Images/Learnify.ico"> -->
+        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+        <link rel="stylesheet" href="styles.css">
+        <title>Learnify</title>
+    </head>
+    <body>
+  <!-- This file is a visual-only scaffold (static examples) so you can start front-end/CSS work.
+       Replace static cards with Vue bindings later when you wire up the logic. -->
+  <div class="container">
+    <aside class="sidebar">
+      <div class="search-block">
+        <input class="search-input" type="text" placeholder="Search for a course..." />
+      </div>
+
+      <div class="controls">
+        <h3>Sort by</h3>
+        <div class="radio-group">
+          <label><input type="radio" name="sort" checked> Topic</label>
+          <label><input type="radio" name="sort"> Location</label>
+          <label><input type="radio" name="sort"> Price</label>
+          <label><input type="radio" name="sort"> Spaces</label>
+        </div>
+
+        <h3>Order</h3>
+        <div class="radio-group">
+          <label><input type="radio" name="order" checked> Ascending</label>
+          <label><input type="radio" name="order"> Descending</label>
+        </div>
+      </div>
+
+      <div class="cartButton">
+        <button class="cart-pill">
+          <span class="cart-count">3</span>
+          <i class="fa-solid fa-cart-plus"></i>
+          Cart
+        </button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <!-- Courses grid (static examples for styling) -->
+      <section class="courses">
+        <article class="card">
+          <figure class="thumb">
+            <img src="https://via.placeholder.com/175x100.png?text=Course+1" alt="Course 1">
+          </figure>
+          <div class="card-body">
+            <h2 class="title">Introduction to HTML</h2>
+            <p class="meta">Location: Online</p>
+            <p class="meta">Price: £25</p>
+            <p class="meta">Spaces Available: 5</p>
+            <button class="btn">Add to cart</button>
+          </div>
+        </article>
+
+        <article class="card">
+          <figure class="thumb">
+            <img src="https://via.placeholder.com/175x100.png?text=Course+2" alt="Course 2">
+          </figure>
+          <div class="card-body">
+            <h2 class="title">JavaScript Essentials</h2>
+            <p class="meta">Location: Campus</p>
+            <p class="meta">Price: £40</p>
+            <p class="meta">Spaces Available: 0</p>
+            <button class="btn disabled" disabled>Full</button>
+          </div>
+        </article>
+
+        <article class="card">
+          <figure class="thumb">
+            <img src="https://via.placeholder.com/175x100.png?text=Course+3" alt="Course 3">
+          </figure>
+          <div class="card-body">
+            <h2 class="title">CSS Layouts</h2>
+            <p class="meta">Location: Hybrid</p>
+            <p class="meta">Price: £30</p>
+            <p class="meta">Spaces Available: 2</p>
+            <button class="btn">Add to cart</button>
+          </div>
+        </article>
+      </section>
+
+      <!-- Cart / checkout visual (toggle in real app) -->
+      <section class="cart-visual">
+        <h2>Your Cart</h2>
+        <ul class="cart-list">
+          <li>Introduction to HTML - £25 <button class="small-btn">Remove</button></li>
+          <li>CSS Layouts - £30 <button class="small-btn">Remove</button></li>
+        </ul>
+
+        <div class="checkout">
+          <h3>Checkout</h3>
+          <form class="checkout-form">
+            <div class="form-row">
+              <label>First Name</label>
+              <input type="text" placeholder="First name">
+            </div>
+            <div class="form-row">
+              <label>Last Name</label>
+              <input type="text" placeholder="Last name">
+            </div>
+            <div class="form-row">
+              <label>Address</label>
+              <input type="text" placeholder="Address">
+            </div>
+            <div class="form-row">
+              <label>Phone</label>
+              <input type="tel" placeholder="Phone">
+            </div>
+            <div class="form-row">
+              <label>Email</label>
+              <input type="email" placeholder="Email">
+            </div>
+
+            <button class="btn primary">Checkout</button>
+          </form>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
