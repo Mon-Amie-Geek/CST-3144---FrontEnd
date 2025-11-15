@@ -1,0 +1,6 @@
+/* Import the Inter font */
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@100..900&display=swap');
+
+body {
+    font-family: 'Roboto Condensed', sans-serif;
+}
