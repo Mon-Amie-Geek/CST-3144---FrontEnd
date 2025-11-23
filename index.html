@@ -46,7 +46,7 @@
         <!-- SIDEBAR -->
         <div class="bg-yellow-900 inline-flex flex-col text-white min-h-full">
 
-          <div class="bg-emerald-1200 text-center mt-10 mb-10 ml-5 mr-5 rounded-lg">
+          <div class="bg-emerald-700 text-center mt-10 mb-10 ml-5 mr-5 rounded-lg">
             <p class="m-1 font-bold text-lg">Filters</p>
           </div>
 
@@ -388,7 +388,7 @@
         },
 
         sendOrder() {
-          fetch(`${this.server}/orders`, {
+          fetch(`${this.server}/order`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(this.order)
