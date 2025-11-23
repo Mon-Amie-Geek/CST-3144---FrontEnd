@@ -149,13 +149,13 @@
           <div class="h-0.5 w-full bg-black my-8"></div>
 
           <div class="w-full mx-10 max-h-80 overflow-y-auto">
-            <div v-for="orderItem in cart" :key="orderItem._id">
+            <div v-for="order in cart" :key="order._id">
               <div class="mx-3">
-                <p>Tutoring ID: {{ orderItem._id }}</p>
-                <p>Tutoring Location: {{ orderItem.location }}</p>
-                <p>Tutoring Subject: {{ orderItem.subject }}</p>
-                <p>Tutoring Price: {{ orderItem.price }}</p>
-                <p>Quantity Ordered: {{ orderItem.qty }}</p>
+                <p>Tutoring ID: {{ order._id }}</p>
+                <p>Tutoring Location: {{ order.location }}</p>
+                <p>Tutoring Subject: {{ order.subject }}</p>
+                <p>Tutoring Price: {{ order.price }}</p>
+                <p>Quantity Ordered: {{ order.qty }}</p>
               </div>
               <div class="h-0.5 w-full bg-black my-5"></div>
             </div>
@@ -364,7 +364,7 @@
 
         removeFromCart(index, tutoring) {
           if (tutoring.qty > 1) {
-            tutoring.qty--;
+            tutoring.qty -=1;
           } else {
             this.cart.splice(index, 1);
           }
