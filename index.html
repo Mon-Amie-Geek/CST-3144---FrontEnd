@@ -1,108 +1,479 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="https://unpkg.com/vue@2.7.14/dist/vue.min.js"></script>
-        <script src="https://cdn.tailwindcss.com"></script>
-        <!--  ##Way to host on Render -- To fix ##
-        <link rel="icon" type="image/x-icon" href="https://CST3144-Backend.onrender.com/Images/Learnify.ico"> -->
-        <link rel="stylesheet" href="styles.css">
-        <title>Learnify</title>
-    </head>
-    <body class = "bg-emerald-500">
-      <div id="webpage">
-        <div v-if = "checkout === false">
-          <header>
-            <div class = "bg-yellow-70 flex justify-center text-center">
-              <!-- Flex box container for logo brand (Margin-left: 3.5 rem:56px, margin-right: 14rem:224px) -->
-              <div class="flex items-center ml-14 mr-56">
-                <p class = "font-bold text-white text -2xl">Learnify</p>
-              </div>
-              <!-- Flexbox to push items to other side, centers horizontally : Middle section for search bar-->
-              <div class = " flex flex-grow justify-center">
-                <input v-model = "searchQuery" v-on:input = "fetchSearchedTutoring()" class = "h-10 m-5 w-1/2 rounded -2xl text-center outline-none"  placeholder="Type to search ...">
-              </div>
-              <div class = "flex items-center mr-10">
-                <button v-on:click="checkout=true" class = "bg-slate-50 rounded-lg p-1 pl-5 font-bold hover: bg-neutral-100 disabled: bg-red-500" : disabled = "cart-length === 0">
-                  Checkout
-                </button>
-              </div>
-            </div>
-          </header>
-          <main class="flex flex-row">
-            <div class = "bg-yellow-75 inline-flex  flex-col text-white min-h-full">
-              <div class="bg-emerald-1200 text-center mt-10 mb-10 ml-5 mr-5 rounded-lg">
-                <p class="m-1 text-bold text-lg"> Filters </p>
-              </div>
-              <div class = "ml-5 mr-32 text-bold text-base">
-                <label class=""flex items-center mb-5 rounded- 2xl">
-                  <input v-model="currentFilter" v-on: change="filterTutoring()" type="radio" name="searchCriteria" value="subject" class="mr-2">
-                  Subject
-                </label>
-                <label class="flex items-center mb-5">
-                  <input v-model="currentFilter" v-on: change="filterTutoring()" type="radio" name="searchCriteria" value="location" class="mr-2">
-                  Location
-                </label>
-                <label class="flex items-center mb-5">
-                  <input v-model="currentFilter" v-on: change="filterTutoring()" type="radio" name="searchCriteria" value="price" class="mr-2">
-                  Price
-                </label>
-                <label class="flex items-center mb-5">
-                  <input v-model="currentFilter" v-on: change="filterTutoring()" type="radio" name="searchCriteria" value="spaces" class="mr-2">
-                  Spaces
-                </label>
-              </div>
-              <div class=""bg-emerald-800 text-center mt-10 mb-10 ml-5 mr-5 rounded-lg">
-                <p class="m-1 text-bold text-lg"> Sort By </p>
-              </div>
-              <div class="ml-5 mr-32 text-bold text-base mb-64">
-                <label class="flex items-center mb-5 rounded- 2xl">
-                  <input v-model="currentSort" v-on: change="filterTutoring()" type="radio" name="sortBy" value="ascending" class="mr-2": disabled = "currentFilter === ''">
-                  Ascending
-                </label>
-                <label class="flex items-center mb-5">
-                  <input v-model="currentSort" v-on: change="filterTutoring()" type="radio" name="sortBy" value="descending" class="mr-2": disabled = "currentFilter === ''">
-                  Descending
-                </label>
-              </div>
-            </div>
-            <div class ="h-full w-full">
-              <div class=""flex flex-row flex-wrap gap-10 justify center">
-                <div v-for="tutoring in tutorships">
-                  <div class=""inline-flex text-center items-center justify-between bg-neutral-100 h-44 w-[448px] rounded-lg m-10 shadow-xl">
-                    <img v-bind:src ="`${server}/images/${tutoring.subject.toLowerCase()}.png`" class="h-20 w-20 ml-5">
-                    <div class="felx felx-col items-start">
-                        <p class="font-bold text-xl"> {{ tutoring.subject }} </p>
-                        <div class="flex flex-row gap-5 text-neutral-500">
-                          <p class="text-green-400">£{{tutoring.price}}</p>
-                          <p>{{tutoring.location}}</p>
-                          <p>Spaces: {{tutoring.space}} seats</p>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@2.7.14/dist/vue.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="https://backend.onrender.com/assets/Learnify.ico">
+  <link rel="stylesheet" href="styles.css">
+  <title>Learnify</title>
+</head>
 
-                        </div>
-                      </div>
-                      
-                      <button v-on:click="addToCart(tutoring)" class = "p-3 bg-slate-500 rounded-full text-2xl font-bold h-10 w-10 flex items-center mr-5 hover:bg-slate-600 disabled: bg-gray-500" :disabled = "tutoring.space <= 0">
-                        <p class="relative bottom-0.5">+</p>
-                      </button>
-                      
-                    </div>
+<body class="bg-emerald-500">
+  <div id="webpage">
 
-                </div> 
-              </div>
-            </div>
+    <!-- MAIN SHOP VIEW -->
+    <div v-if="checkout === false">
+      <header>
+        <div class="bg-yellow-700 flex justify-center text-center">
+          <div class="flex items-center ml-14 mr-56">
+            <p class="font-bold text-white text-2xl">Learnify</p>
+          </div>
 
-          </main>
-          <footer class="bg-yellow-70 h-20">
-            
-          </footer>
+          <div class="flex flex-grow justify-center">
+            <input 
+              v-model="searchQuery"
+              @input="fetchSearchedTutoring"
+              class="h-10 m-5 w-1/2 rounded-2xl text-center outline-none"
+              placeholder="Type to search..."
+            >
+          </div>
+
+          <div class="flex items-center mr-10">
+            <button 
+              @click="checkout=true" 
+              class="bg-slate-50 rounded-lg p-1 pl-5 font-bold hover:bg-neutral-100 disabled:bg-red-500"
+              :disabled="cart.length === 0">
+              Checkout
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main class="flex flex-row">
+
+        <!-- SIDEBAR -->
+        <div class="bg-yellow-900 inline-flex flex-col text-white min-h-full">
+
+          <div class="bg-emerald-1200 text-center mt-10 mb-10 ml-5 mr-5 rounded-lg">
+            <p class="m-1 font-bold text-lg">Filters</p>
+          </div>
+
+          <div class="ml-5 mr-32 font-bold text-base">
+            <label class="flex items-center mb-5">
+              <input v-model="currentFilter" @change="filterTutorship" type="radio" value="topic" class="mr-2">
+              Topic
+            </label>
+
+            <label class="flex items-center mb-5">
+              <input v-model="currentFilter" @change="filterTutorship" type="radio" value="location" class="mr-2">
+              Location
+            </label>
+
+            <label class="flex items-center mb-5">
+              <input v-model="currentFilter" @change="filterTutorship" type="radio" value="price" class="mr-2">
+              Price
+            </label>
+
+            <label class="flex items-center mb-5">
+              <input v-model="currentFilter" @change="filterTutorship" type="radio" value="spaces" class="mr-2">
+              Spaces
+            </label>
+          </div>
+
+          <div class="bg-emerald-800 text-center mt-10 mb-10 ml-5 mr-5 rounded-lg">
+            <p class="m-1 font-bold text-lg">Sort By</p>
+          </div>
+
+          <div class="ml-5 mr-32 font-bold text-base mb-64">
+            <label class="flex items-center mb-5">
+              <input v-model="currentSort" @change="filterTutorship" type="radio" value="ascending" class="mr-2" :disabled="currentFilter === ''">
+              Ascending
+            </label>
+            <label class="flex items-center mb-5">
+              <input v-model="currentSort" @change="filterTutorship" type="radio" value="descending" class="mr-2" :disabled="currentFilter === ''">
+              Descending
+            </label>
+          </div>
+
         </div>
 
-          
-          
-      <script>
-        let 
-      </script>
-  
-    </body>
+        <!-- MAIN CONTENT -->
+        <div class="h-full w-full">
+          <div class="flex flex-row flex-wrap gap-10 justify-center">
+
+            <div v-for="tutoring in tutorship" :key="tutoring._id">
+              <div class="inline-flex text-center items-center justify-between bg-neutral-100 h-44 w-[448px] rounded-lg m-10 shadow-xl">
+
+                <img :src="`${server}/images/${tutoring.subject.toLowerCase()}.png`" class="h-20 w-20 ml-5">
+
+                <div class="flex flex-col items-start">
+                  <p class="font-bold text-xl">{{ tutoring.subject }}</p>
+
+                  <div class="flex flex-row gap-5 text-neutral-500">
+                    <p class="text-green-400">£{{ tutoring.price }}</p>
+                    <p>{{ tutoring.location }}</p>
+                    <p>Spaces: {{ tutoring.space }} seats</p>
+                  </div>
+                </div>
+
+                <button 
+                  @click="addToCart(tutoring)"
+                  class="p-3 bg-slate-500 rounded-full text-2xl font-bold h-10 w-10 flex items-center mr-5 hover:bg-slate-600 disabled:bg-gray-500"
+                  :disabled="tutoring.space <= 0">
+                  <p class="relative bottom-0.5">+</p>
+                </button>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </main>
+
+      <footer class="bg-yellow-700 h-20"></footer>
+    </div>
+
+    <!-- CHECKOUT VIEW -->
+    <div v-if="checkout === true">
+      <main class="bg-yellow-700 h-screen flex items-center justify-center">
+
+        <!-- STAGE 2 -->
+        <div v-if="checkoutStage === 2" class="bg-white rounded-lg inline-flex flex-col items-center justify-center">
+          <p class="text-2xl mx-16 mb-5 mt-16">Thank you for your order</p>
+          <img :src="`${server}/images/thankyou.png`" class="h-20 w-20 my-5">
+
+          <button 
+            @click="() => { checkout = false; checkoutStage = 0 }"
+            class="bg-yellow-700 text-white rounded-lg px-4 py-1 font-bold hover:bg-yellow-900 mt-5 mb-16">
+            Continue Shopping
+          </button>
+        </div>
+
+        <!-- STAGE 1 -->
+        <div v-if="checkoutStage === 1" class="bg-white rounded-lg inline-flex flex-col items-center justify-center">
+          <p class="text-2xl mt-8 font-bold">Order Summary</p>
+
+          <div class="h-0.5 w-full bg-black my-8"></div>
+
+          <div class="w-full mx-10 max-h-80 overflow-y-auto">
+            <div v-for="orderItem in cart" :key="orderItem._id">
+              <div class="mx-3">
+                <p>Tutoring ID: {{ orderItem._id }}</p>
+                <p>Tutoring Location: {{ orderItem.location }}</p>
+                <p>Tutoring Subject: {{ orderItem.subject }}</p>
+                <p>Tutoring Price: {{ orderItem.price }}</p>
+                <p>Quantity Ordered: {{ orderItem.qty }}</p>
+              </div>
+              <div class="h-0.5 w-full bg-black my-5"></div>
+            </div>
+          </div>
+
+          <div class="flex gap-20 mb-5 w-full justify-center text-center">
+            <button 
+              @click="checkoutStage--"
+              class="text-sm bg-yellow-700 text-white rounded-sm py-1 font-bold hover:bg-yellow-900 w-1/4">
+              Return
+            </button>
+
+            <button 
+              @click="handleCheckout"
+              class="text-sm bg-green-400 text-white rounded-sm py-1 font-bold hover:bg-slate-600 w-1/4">
+              Confirm Order
+            </button>
+          </div>
+        </div>
+
+        <!-- STAGE 0 -->
+        <div v-if="checkoutStage === 0" class="bg-white shadow-lg flex text-center rounded-xl">
+
+          <!-- LEFT SIDE CART -->
+          <div class="flex flex-col items-center w-2/3">
+            <div class="flex h-1/4 items-center justify-start w-full gap-1 max-h-80">
+              <button @click="checkout=false" class="text-3xl mx-4">🡐</button>
+              <p class="font-extrabold text-3xl my-5">Your Order</p>
+            </div>
+
+            <div class="my-5 mx-10">
+              <div class="flex gap-40 my-3 font-bold">
+                <p>Item</p>
+                <p>Quantity</p>
+                <p>Price (£)</p>
+              </div>
+
+              <div class="w-full max-h-80 overflow-y-auto">
+                <div v-for="(tutoring, index) in cart" :key="index">
+
+                  <div class="flex text-gray-600 my-2">
+
+                    <button 
+                      @click="removeFromCart(index, tutoring)" 
+                      class="text-white bg-slate-700 hover:bg-slate-900 rounded-full px-2 font-bold mr-1">-</button>
+
+                    <div class="flex justify-between w-full">
+                      <p class="w-36 text-left">{{ tutoring.subject }}</p>
+                      <p class="mr-8">{{ tutoring.qty }}</p>
+                      <p class="mr-4 w-36 text-right">{{ tutoring.price }}</p>
+                    </div>
+
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="h-0.5 bg-black my-5"></div>
+
+              <div class="flex justify-between my-3 font-bold">
+                <p>Total:</p>
+                <p class="mr-2">£{{ total }}</p>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- RIGHT SIDE FORM -->
+          <div class="flex flex-col items-center bg-yellow-950 rounded-tr-xl rounded-br-xl">
+
+            <p class="font-bold text-xl mt-10 mb-5 text-white">Checkout Details</p>
+
+            <!-- NAME -->
+            <input 
+              v-model="user.username"
+              :class="{'border-teal-500': !isUsernameValid && isUsernameEmpty}"
+              class="border-2 border-yellow-900 text-white text-center rounded-lg my-3 p-1 bg-yellow-900 outline-none"
+              type="text"
+              placeholder="Your Name"
+            >
+            <div class="h-5">
+              <p v-show="!isUsernameValid && isUsernameEmpty" class="text-red-400 text-sm">Invalid Name</p>
+            </div>
+
+            <!-- PHONE -->
+            <input 
+              v-model="user.phone"
+              :class="{'border-teal-500': !isPhoneValid && isPhoneEmpty}"
+              class="border-2 border-yellow-900 text-white text-center rounded-lg my-3 p-1 bg-yellow-900 outline-none"
+              type="text"
+              placeholder="Your Phone Number"
+            >
+            <div class="h-5">
+              <p v-show="!isPhoneValid && isPhoneEmpty" class="text-red-400 text-sm">Invalid Phone Number</p>
+            </div>
+
+            <!-- EMAIL -->
+            <input 
+              v-model="user.email"
+              :class="{'border-teal-500': !isEmailValid && isEmailEmpty}"
+              class="border-2 border-yellow-900 text-white text-center rounded-lg my-3 p-1 bg-yellow-900 outline-none"
+              type="email"
+              placeholder="Your Email"
+            >
+            <div class="h-5">
+              <p v-show="!isEmailValid && isEmailEmpty" class="text-red-400 text-sm">Invalid Email</p>
+            </div>
+
+            <!-- ADDRESS -->
+            <input 
+              v-model="user.billingAddress"
+              :class="{'border-teal-500': !isBillingAddressValid && isBillingAddressEmpty}"
+              class="border-2 border-yellow-900 text-white text-center rounded-lg my-3 p-1 bg-yellow-900 outline-none"
+              type="text"
+              placeholder="Your Billing Address"
+            >
+            <div class="h-5">
+              <p v-show="!isBillingAddressValid && isBillingAddressEmpty" class="text-red-400 text-sm">Invalid Billing Address</p>
+            </div>
+
+            <!-- CONFIRM -->
+            <button 
+              @click="checkoutStage++"
+              class="bg-green-500 text-white rounded-lg px-4 py-1 font-bold hover:bg-green-600 my-5 mx-24 w-1/2 disabled:bg-red-500"
+              :disabled="!canCheckout">
+              Confirm Order
+            </button>
+
+          </div>
+
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- VUE SCRIPT -->
+  <script>
+    new Vue({
+      el: "#webpage",
+      data: {
+        tutorship: [],
+        cart: [],
+        order: [],
+        server: "https://backend.onrender.com",
+        currentFilter: "",
+        currentSort: "ascending",
+        searchQuery: "",
+        total: 0,
+        checkout: false,
+
+        user: {
+          username: "",
+          phone: "",
+          email: "",
+          billingAddress: ""
+        },
+
+        checkoutStage: 0
+      },
+
+      methods: {
+
+        async fetchTutorship() {
+          let response = await fetch(`${this.server}/tutorship`);
+          this.tutorship = await response.json();
+        },
+
+        filterTutorship() {
+          if (this.currentFilter === "topic") {
+            this.tutorship.sort((a, b) => a.subject.localeCompare(b.subject));
+          } else if (this.currentFilter === "location") {
+            this.tutorship.sort((a, b) => a.location.localeCompare(b.location));
+          } else if (this.currentFilter === "price") {
+            this.tutorship.sort((a, b) => a.price - b.price);
+          } else if (this.currentFilter === "spaces") {
+            this.tutorship.sort((a, b) => a.space - b.space);
+          }
+
+          if (this.currentSort === "descending") {
+            this.tutorship.reverse();
+          }
+        },
+
+        async fetchSearchedTutoring() {
+          let response = await fetch(`${this.server}/search?q=${this.searchQuery}`);
+
+          if (response.status === 200)
+            this.tutorship = await response.json();
+          else
+            this.tutorship = [];
+        },
+
+        addToCart(tutoring) {
+          tutoring.space--;
+          this.total += tutoring.price;
+
+          let existing = this.cart.find(item => item.subject === tutoring.subject);
+
+          if (existing) {
+            existing.qty++;
+          } else {
+            this.cart.push({ ...tutoring, qty: 1 });
+          }
+        },
+
+        removeFromCart(index, tutoring) {
+          if (tutoring.qty > 1) {
+            tutoring.qty--;
+          } else {
+            this.cart.splice(index, 1);
+          }
+
+          this.total -= tutoring.price;
+          this.tutorship.find(t => t.subject === tutoring.subject).space++;
+        },
+
+        updateTutoring(tutoring) {
+          let tutoringID = tutoring._id;
+
+          let updated = { ...tutoring };
+          delete updated._id;
+          delete updated.qty;
+
+          fetch(`${this.server}/tutoring/${tutoringID}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(updated)
+          });
+        },
+
+        sendOrder() {
+          fetch(`${this.server}/orders`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(this.order)
+          });
+        },
+
+        handleCheckout() {
+          this.checkoutStage++;
+
+          let orderList = [];
+
+          for (let item of this.cart) {
+            orderList.push({ subject: item._id, qty: item.qty });
+            this.updateTutoring(item);
+          }
+
+          this.order = {
+            username: this.user.username,
+            phone: this.user.phone,
+            email: this.user.email,
+            billingAddress: this.user.billingAddress,
+            tutoring: orderList
+          };
+
+          this.sendOrder();
+
+          this.cart = [];
+          this.order = [];
+          this.total = 0;
+        }
+
+      },
+
+      computed: {
+
+        canCheckout() {
+          return (
+            this.cart.length > 0 &&
+            this.isUsernameValid &&
+            this.isPhoneValid &&
+            this.isEmailValid &&
+            this.isBillingAddressValid
+          );
+        },
+
+        isUsernameValid() {
+          return /^[a-zA-Z\s]+$/.test(this.user.username);
+        },
+
+        isUsernameEmpty() {
+          return this.user.username.length > 0;
+        },
+
+        isPhoneValid() {
+          return /^\+?[0-9]+$/.test(this.user.phone);
+        },
+
+        isPhoneEmpty() {
+          return this.user.phone.length > 0;
+        },
+
+        isEmailValid() {
+          return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(this.user.email);
+        },
+
+        isEmailEmpty() {
+          return this.user.email.length > 0;
+        },
+
+        isBillingAddressValid() {
+          return this.user.billingAddress.length > 0;
+        },
+
+        isBillingAddressEmpty() {
+          return this.user.billingAddress.length > 0;
+        }
+
+      },
+
+      created() {
+        this.fetchTutorship();
+      }
+
+    });
+  </script>
+
+</body>
 </html>
