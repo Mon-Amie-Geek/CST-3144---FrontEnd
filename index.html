@@ -295,7 +295,7 @@
         lessons: [],
         cart: [],
         order: [],
-        //server: '',
+        server: 'https://learnify-nk6r.onrender.com',
         currentFilter: "",
         currentSort: "ascending",
         searchQuery: "",
@@ -414,7 +414,7 @@
 
         //function to fetch all lessons from the backend
         async fetchLessons() {
-          let response = await fetch(`${this.server}/lessons`,
+          let response = await fetch(`${this.server}/lessons`.trim(),
               {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' }
@@ -449,7 +449,7 @@
 
         //function to fetch lessons based on the search query
         async fetchSearchedLessons() {
-          let response = await fetch(`${this.server}/search?q=${this.searchQuery}`,
+          let response = await fetch(`${this.server}/search?q=${this.searchQuery.trim()}`,
             {
               method: 'GET',
               headers: { 'Content-Type': 'application/json' }
