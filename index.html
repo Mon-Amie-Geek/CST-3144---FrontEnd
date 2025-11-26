@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://unpkg.com/vue@2.7.14/dist/vue.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- <link rel="icon" href="https://backend.onrender.com/assets/Learnify.ico"> -->
+  <script src="https://unpkg.com/vue@2.7.14/dist/vue.min.js"></script>
+  <!-- <link rel="icon" href="https://backend.onrender.com/imagess/Learnify.ico"> -->
   <link rel="stylesheet" href="styles.css">
   <title>Learnify</title>
 </head>
@@ -14,27 +14,22 @@
   <div id="webpage">
 
     <!-- MAIN SHOP VIEW -->
-    <div v-if="checkout === false">
+    <div v-if="checkout==false">
       <header>
-        <div class="bg-yellow-700 flex justify-center text-center">
+        <div class="bg-orange-900 flex justify-center text-center">
           <div class="flex items-center ml-14 mr-56">
             <p class="font-bold text-white text-2xl">Learnify</p>
           </div>
 
           <div class="flex flex-grow justify-center">
-            <input 
-              v-model="searchQuery"
-              @input="fetchSearchedTutoring"
-              class="h-10 m-5 w-1/2 rounded-2xl text-center outline-none"
-              placeholder="Type to search..."
-            >
+            <input v-model="searchQuery" v-on:input="fetchSearchedLessons()" class="h-10 m-5 w-1/2 rounded-2xl text-center outline-none" placeholder="Type to search...">
           </div>
 
           <div class="flex items-center mr-10">
             <button 
               @click="checkout=true" 
-              class="bg-slate-50 rounded-lg p-1 pl-5 font-bold hover:bg-neutral-100 disabled:bg-red-500"
-              :disabled="cart.length === 0">
+              class="bg-slate-50 rounded-lg px-5 py-1 font-bold hover:bg-neutral-100 disabled:bg-red-500"
+              :disabled="cart.length == 0">
               Checkout
             </button>
           </div>
@@ -44,45 +39,45 @@
       <main class="flex flex-row">
 
         <!-- SIDEBAR -->
-        <div class="bg-yellow-900 inline-flex flex-col text-white min-h-full">
+        <div class="bg-red-950 inline-flex flex-col text-white min-h-full">
 
-          <div class="bg-emerald-700 text-center mt-10 mb-10 ml-5 mr-5 rounded-lg">
+          <div class="bg-amber-900 text-center mt-10 mb-10 ml-5 mr-5 rounded-lg">
             <p class="m-1 font-bold text-lg">Filters</p>
           </div>
 
           <div class="ml-5 mr-32 font-bold text-base">
             <label class="flex items-center mb-5">
-              <input v-model="currentFilter" @change="filterTutorship" type="radio" value="topic" class="mr-2">
-              Topic
+              <input v-model="currentFilter" @change="filterLessons()" type="radio" name="searchCriteria" value="subject" class="mr-2">
+              Subject
             </label>
 
             <label class="flex items-center mb-5">
-              <input v-model="currentFilter" @change="filterTutorship" type="radio" value="location" class="mr-2">
+              <input v-model="currentFilter" @change="filterLessons()" type="radio" name="searchCriteria" value="location" class="mr-2">
               Location
             </label>
 
             <label class="flex items-center mb-5">
-              <input v-model="currentFilter" @change="filterTutorship" type="radio" value="price" class="mr-2">
+              <input v-model="currentFilter" @change="filterLessons()" type="radio" name="searchCriteria" value="price" class="mr-2">
               Price
             </label>
 
             <label class="flex items-center mb-5">
-              <input v-model="currentFilter" @change="filterTutorship" type="radio" value="spaces" class="mr-2">
+              <input v-model="currentFilter" @change="filterLessons()" type="radio" name="searchCriteria" value="spaces" class="mr-2">
               Spaces
             </label>
           </div>
 
-          <div class="bg-emerald-800 text-center mt-10 mb-10 ml-5 mr-5 rounded-lg">
+          <div class="bg-amber-900 text-center mt-10 mb-10 ml-5 mr-5 rounded-lg">
             <p class="m-1 font-bold text-lg">Sort By</p>
           </div>
 
           <div class="ml-5 mr-32 font-bold text-base mb-64">
-            <label class="flex items-center mb-5">
-              <input v-model="currentSort" @change="filterTutorship" type="radio" value="ascending" class="mr-2" :disabled="currentFilter === ''">
+            <label class="flex items-center mb-5 rounded-2xl">
+              <input v-model="currentSort" @change="filterLessons()" type="radio" name="sortBy" value="ascending" class="mr-2" :disabled="currentFilter==''">
               Ascending
             </label>
             <label class="flex items-center mb-5">
-              <input v-model="currentSort" @change="filterTutorship" type="radio" value="descending" class="mr-2" :disabled="currentFilter === ''">
+              <input v-model="currentSort" @change="filterLessons()" type="radio" name="sortBy" value="descending" class="mr-2" :disabled="currentFilter==''">
               Descending
             </label>
           </div>
@@ -93,25 +88,25 @@
         <div class="h-full w-full">
           <div class="flex flex-row flex-wrap gap-10 justify-center">
 
-            <div v-for="tutoring in tutorship" :key="tutoring._id">
+            <div v-for="lesson in lessons">
               <div class="inline-flex text-center items-center justify-between bg-neutral-100 h-44 w-[448px] rounded-lg m-10 shadow-xl">
 
-                <img :src="`${server}/images/${tutoring.subject.toLowerCase()}.png`" class="h-20 w-20 ml-5">
+                <img v-bind:src=`${server}/images/${lesson.topic.toLowerCase()}.png` class="h-20 w-20 ml-5">
 
                 <div class="flex flex-col items-start">
-                  <p class="font-bold text-xl">{{ tutoring.subject }}</p>
+                  <p class="font-bold text-xl">{{lesson.topic}}</p>
 
                   <div class="flex flex-row gap-5 text-neutral-500">
-                    <p class="text-green-400">£{{ tutoring.price }}</p>
-                    <p>{{ tutoring.location }}</p>
-                    <p>Spaces: {{ tutoring.space }} seats</p>
+                    <p class="text-green-400">£{{lesson.price }}</p>
+                    <p>{{lesson.location}}</p>
+                    <p>{{lesson.space}} seats</p>
                   </div>
                 </div>
 
                 <button 
-                  @click="addToCart(tutoring)"
+                  @click="addToCart(lesson)"
                   class="p-3 bg-slate-500 rounded-full text-2xl font-bold h-10 w-10 flex items-center mr-5 hover:bg-slate-600 disabled:bg-gray-500"
-                  :disabled="tutoring.space <= 0">
+                  :disabled="lesson.space <= 0">
                   <p class="relative bottom-0.5">+</p>
                 </button>
 
@@ -123,39 +118,39 @@
 
       </main>
 
-      <footer class="bg-yellow-700 h-20"></footer>
+      <footer class="bg-orange-900 h-20"></footer>
     </div>
 
     <!-- CHECKOUT VIEW -->
-    <div v-if="checkout === true">
+    <div v-if="checkout==true">
       <main class="bg-yellow-700 h-screen flex items-center justify-center">
 
         <!-- STAGE 2 -->
-        <div v-if="checkoutStage === 2" class="bg-white rounded-lg inline-flex flex-col items-center justify-center">
+        <div v-if="checkoutStage == 2" class="bg-white rounded-lg inline-flex flex-col items-center justify-center">
           <p class="text-2xl mx-16 mb-5 mt-16">Thank you for your order</p>
-          <img :src="`${server}/images/thankyou.png`" class="h-20 w-20 my-5">
+          <img v-bind:src=`${server}/images/thankyou.png` class="h-20 w-20 my-5">
 
           <button 
-            @click="() => { checkout = false; checkoutStage = 0 }"
+            @click="() => {checkout = false; checkoutStage = 0}"
             class="bg-yellow-700 text-white rounded-lg px-4 py-1 font-bold hover:bg-yellow-900 mt-5 mb-16">
             Continue Shopping
           </button>
         </div>
 
         <!-- STAGE 1 -->
-        <div v-if="checkoutStage === 1" class="bg-white rounded-lg inline-flex flex-col items-center justify-center">
+        <div v-if="checkoutStage == 1" class="bg-white rounded-lg inline-flex flex-col items-center justify-center">
           <p class="text-2xl mt-8 font-bold">Order Summary</p>
 
           <div class="h-0.5 w-full bg-black my-8"></div>
 
           <div class="w-full mx-10 max-h-80 overflow-y-auto">
-            <div v-for="order in cart" :key="order._id">
+            <div v-for="order in cart">
               <div class="mx-3">
-                <p>Tutoring ID: {{ order._id }}</p>
-                <p>Tutoring Location: {{ order.location }}</p>
-                <p>Tutoring Subject: {{ order.subject }}</p>
-                <p>Tutoring Price: {{ order.price }}</p>
-                <p>Quantity Ordered: {{ order.qty }}</p>
+                <p>Lesson ID: {{order._id}}</p>
+                <p>Lesson Location: {{order.location}}</p>
+                <p>Lesson Topic: {{order.topic}}</p>
+                <p>Lesson Price: {{order.price}}</p>
+                <p>Quantity Ordered: {{order.qty}}</p>
               </div>
               <div class="h-0.5 w-full bg-black my-5"></div>
             </div>
@@ -169,15 +164,15 @@
             </button>
 
             <button 
-              @click="handleCheckout"
+              @click="handleCheckout()"
               class="text-sm bg-green-400 text-white rounded-sm py-1 font-bold hover:bg-slate-600 w-1/4">
-              Confirm Order
+              Confirm
             </button>
           </div>
         </div>
 
         <!-- STAGE 0 -->
-        <div v-if="checkoutStage === 0" class="bg-white shadow-lg flex text-center rounded-xl">
+        <div v-if="checkoutStage == 0" class="bg-white shadow-lg flex text-center rounded-xl">
 
           <!-- LEFT SIDE CART -->
           <div class="flex flex-col items-center w-2/3">
@@ -194,18 +189,18 @@
               </div>
 
               <div class="w-full max-h-80 overflow-y-auto">
-                <div v-for="(tutoring, index) in cart" :key="index">
+                <div v-for="(lesson, index) in cart">
 
                   <div class="flex text-gray-600 my-2">
 
                     <button 
-                      @click="removeFromCart(index, tutoring)" 
+                      @click="removeFromCart(index,lesson)" 
                       class="text-white bg-slate-700 hover:bg-slate-900 rounded-full px-2 font-bold mr-1">-</button>
 
                     <div class="flex justify-between w-full">
-                      <p class="w-36 text-left">{{ tutoring.subject }}</p>
-                      <p class="mr-8">{{ tutoring.qty }}</p>
-                      <p class="mr-4 w-36 text-right">{{ tutoring.price }}</p>
+                      <p class="w-36 text-left">{{lesson.topic}}</p>
+                      <p class="mr-8">{{lesson.qty}}</p>
+                      <p class="mr-4 w-36 text-right">{{lesson.price}}</p>
                     </div>
 
                   </div>
@@ -217,7 +212,7 @@
 
               <div class="flex justify-between my-3 font-bold">
                 <p>Total:</p>
-                <p class="mr-2">£{{ total }}</p>
+                <p class="mr-2">{{total}}</p>
               </div>
 
             </div>
@@ -231,7 +226,7 @@
             <!-- NAME -->
             <input 
               v-model="user.username"
-              :class="{'border-teal-500': !isUsernameValid && isUsernameEmpty}"
+              v-bind:class="{'border-teal-500':!isUsernameValid && isUsernameEmpty}"
               class="border-2 border-yellow-900 text-white text-center rounded-lg my-3 p-1 bg-yellow-900 outline-none"
               type="text"
               placeholder="Your Name"
@@ -243,7 +238,7 @@
             <!-- PHONE -->
             <input 
               v-model="user.phone"
-              :class="{'border-teal-500': !isPhoneValid && isPhoneEmpty}"
+              v-bind:class="{'border-teal-500': !isPhoneValid && isPhoneEmpty}"
               class="border-2 border-yellow-900 text-white text-center rounded-lg my-3 p-1 bg-yellow-900 outline-none"
               type="text"
               placeholder="Your Phone Number"
@@ -255,7 +250,7 @@
             <!-- EMAIL -->
             <input 
               v-model="user.email"
-              :class="{'border-teal-500': !isEmailValid && isEmailEmpty}"
+              v-bind:class="{'border-teal-500': !isEmailValid && isEmailEmpty}"
               class="border-2 border-yellow-900 text-white text-center rounded-lg my-3 p-1 bg-yellow-900 outline-none"
               type="email"
               placeholder="Your Email"
@@ -295,12 +290,12 @@
   <!-- VUE SCRIPT -->
   <script>
     new Vue({
-      el: "#webpage",
+      el: '#webpage',
       data: {
-        tutorship: [],
+        lessons: [],
         cart: [],
         order: [],
-        //server: "https://backend.onrender.com",
+        //server: 'https://backend.onrender.com',
         currentFilter: "",
         currentSort: "ascending",
         searchQuery: "",
@@ -319,160 +314,229 @@
 
       methods: {
 
-        async fetchTutorship() {
-          let response = await fetch(`${this.server}/tutorship`);
-          this.tutorship = await response.json();
-        },
-
-        filterTutorship() {
-          if (this.currentFilter === "topic") {
-            this.tutorship.sort((a, b) => a.subject.localeCompare(b.subject));
-          } else if (this.currentFilter === "location") {
-            this.tutorship.sort((a, b) => a.location.localeCompare(b.location));
-          } else if (this.currentFilter === "price") {
-            this.tutorship.sort((a, b) => a.price - b.price);
-          } else if (this.currentFilter === "spaces") {
-            this.tutorship.sort((a, b) => a.space - b.space);
-          }
-
-          if (this.currentSort === "descending") {
-            this.tutorship.reverse();
-          }
-        },
-
-        async fetchSearchedTutoring() {
-          let response = await fetch(`${this.server}/search?q=${this.searchQuery}`);
-
-          if (response.status === 200)
-            this.tutorship = await response.json();
-          else
-            this.tutorship = [];
-        },
-
-        addToCart(tutoring) {
-          tutoring.space--;
-          this.total += tutoring.price;
-
-          let existing = this.cart.find(item => item.subject === tutoring.subject);
-
-          if (existing) {
-            existing.qty++;
-          } else {
-            this.cart.push({ ...tutoring, qty: 1 });
-          }
-        },
-
-        removeFromCart(index, tutoring) {
-          if (tutoring.qty > 1) {
-            tutoring.qty -=1;
-          } else {
-            this.cart.splice(index, 1);
-          }
-
-          this.total -= tutoring.price;
-          this.tutorship.find(t => t.subject === tutoring.subject).space++;
-        },
-
-        updateTutoring(tutoring) {
-          let tutoringID = tutoring._id;
-
-          let updated = { ...tutoring };
-          delete updated._id;
-          delete updated.qty;
-
-          fetch(`${this.server}/tutoring/${tutoringID}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(updated)
-          });
-        },
-
-        sendOrder() {
-          fetch(`${this.server}/order`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(this.order)
-          });
-        },
-
+        //function which handles the checkout process
         handleCheckout() {
+
+          //checkoutStage represents the different stages of the checkout process
           this.checkoutStage++;
 
-          let orderList = [];
+          //adding each lesson in the cart to the order array
 
-          for (let item of this.cart) {
-            orderList.push({ subject: item._id, qty: item.qty });
-            this.updateTutoring(item);
+          for (let lesson of this.cart) {
+            this.order.push({ topic: lesson._id, qty: lesson.qty });
+            //update any changes made to the lesson in MongoDB
+            this.updateLesson(lesson);
           }
+          //creating the order object with the user's details and the lessons ordered
 
           this.order = {
             username: this.user.username,
             phone: this.user.phone,
             email: this.user.email,
             billingAddress: this.user.billingAddress,
-            tutoring: orderList
+            lesson: this.order
           };
 
+          //sending the order to the backend
           this.sendOrder();
 
+          //clear the cart and order arrays
           this.cart = [];
           this.order = [];
           this.total = 0;
+        },
+
+        //function to update any lesson attribute in MongoDB
+         updateLesson(lesson) {
+
+          //get the Lesson ID
+          let lessonID = lesson._id;
+          //delete id since it's immutable
+          delete lesson._id;
+          //delete qty since it's not stored in MongoDB
+          delete lesson.qty;
+
+          //send the updated lesson to the backend using a PUT request
+          fetch(`${this.server}/lessons/${lessonID}`, {
+            method: 'PUT',
+            headers: { "Content-Type": 'application/json' },
+            body: JSON.stringify({lesson})
+          });
+        },
+
+        //function to send order to the backend
+
+        sendOrder() {
+          fetch(`${this.server}/order`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(this.order)
+          });
+        },
+
+        /* 
+        function to remove a lesson from the cart
+         @param index: the index of the lesson in the cart
+         @param lesson: the lesson to be removed
+         */
+        removeFromCart(index, lesson) {
+          if (lesson.qty > 1) {
+            lesson.qty -=1;
+          } else {
+            //remove the lesson from the cart by splicing it out at the index
+            this.cart.splice(index, 1);
+          }
+
+          this.total -= lesson.price;
+          //update the space of the lesson in the lessons array
+          this.lessons.find((item) => item.topic === lesson.toic).space +=1;
+        },
+        /* function to add a lesson to the cart
+         @param lesson: the lesson to be added to the cart
+        */
+        addToCart(lesson) {
+          lesson.space -=1;
+          this.total += lesson.price;
+          //check if the lesson is already in the cart
+          let currentItem = this.cart.find((item) => item.topic === lesson.topic);
+
+          if (currentItem) {
+            currentItem.qty += 1;
+            currentItem.space -=1;
+          } 
+          //if the lesson is not in the cart, asss it to the card
+          else {
+            //...lesson is not in the cart, add it to the cart
+            this.cart.push({ ...lesson, qty:1});
+          }
+        },
+        
+
+        //function to fetch all lessons from the backend
+        async fetchLessons() {
+          let response = await fetch(`${this.server}/lessons`,
+              {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+              }
+          
+            );
+            this.lessons= await response.json();
+        },
+
+
+        //function to filter the lessons based on the current filter
+        filterLessons() {
+          if (this.currentFilter === 'subject') {
+            // (a,b) => a.topic.localeCompare(b.topic) is the comparison function used to sort the lessons
+            // a and b are 2 lessons being compared and localeCompare is a string comparison
+            this.lessons.sort((a, b) => a.topic.localeCompare(b.topic));
+          } else if (this.currentFilter === 'location') {
+            this.lessons.sort((a, b) => a.location.localeCompare(b.location));
+          } else if (this.currentFilter === 'price') {
+            //(a,b) => a.price - b.price is the comparison function used to sort the lessons
+            // a and b are 2 lessons being compared and price - price is a numerical comparison
+            this.lessons.sort((a, b) => a.price - b.price);
+          } else if (this.currentFilter === 'spaces') {
+            this.lessons.sort((a, b) => a.space - b.space);
+          }
+
+          //if the current sort is descending, reverse the lessons array
+          if (this.currentSort === 'descending') {
+            this.lessons.reverse();
+          }
+        },
+
+        //function to fetch lessons based on the search query
+        async fetchSearchedLessons() {
+          let response = await fetch(`${this.server}/search?q=${this.searchQuery}`,
+            {
+              method: 'GET',
+              headers: { 'Content-Type': 'application/json' }
+            }
+          
+          );
+
+            //if the response is successful, update the lessons array
+          if (response.status === 200)
+          {
+            this.lessons = await response.json();
+          }
+           // if response is not successful, set the lessons array to an empty array displaying nothing 
+          else
+          {
+            this.lessons = [];
+          }
+            
         }
 
       },
 
       computed: {
 
-        canCheckout() {
-          return (
-            this.cart.length > 0 &&
-            this.isUsernameValid &&
-            this.isPhoneValid &&
-            this.isEmailValid &&
-            this.isBillingAddressValid
-          );
+        //function to check if the user can checkout based on cart length and user details
+        canCheckout()
+        {
+          return this.cart.length > 0 && this.isUsernameValid && this.isPhoneValid && this.isEmailValid && this.isBillingAddressValid;
+          
         },
 
-        isUsernameValid() {
-          return /^[a-zA-Z\s]+$/.test(this.user.username);
+        //function to check if the username is valid using a regex
+        isUsernameValid()
+        {
+          const usernameRegex = /^[a-zA-Z\s]+$/;
+          return usernameRegex.test(this.user.username) && this.user.username.length > 0;
         },
 
+        //function to check if the username is empty
         isUsernameEmpty() {
-          return this.user.username.length > 0;
+          return this.user.username;
         },
 
-        isPhoneValid() {
-          return /^\+?[0-9]+$/.test(this.user.phone);
+        //function to check if the phone number is valid using a regex
+        isPhoneValid() 
+        {
+          const phoneRegex = /^\+?[0-9]+$/;
+          return phoneRegex.test(this.user.phone) && this.user.phone.length > 0;
         },
 
-        isPhoneEmpty() {
-          return this.user.phone.length > 0;
+        //function to check if the phone number is empty
+        isPhoneEmpty() 
+        {
+          return this.user.phone.length;
         },
 
-        isEmailValid() {
-          return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(this.user.email);
+        //function to check if the email is valid using a regex
+        isEmailValid() 
+        {
+          const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+          return email.Regex.test(this.user.email) && this.user.length > 0;
         },
 
-        isEmailEmpty() {
-          return this.user.email.length > 0;
+        //function to check if the email is empty
+        isEmailEmpty() 
+        {
+          return this.user.email.length;
         },
 
+        //function to check if the billing address is valid
         isBillingAddressValid() {
           return this.user.billingAddress.length > 0;
         },
 
+        //function to check if the billing address is empty
         isBillingAddressEmpty() {
-          return this.user.billingAddress.length > 0;
+          return this.user.billingAddress.length;
         }
 
       },
 
-      created() {
-        this.fetchTutorship();
+      created()
+      {
+        this.fetchLessons();
       }
 
-    });
+    })
   </script>
 
 </body>
