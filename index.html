@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/vue@2.7.14/dist/vue.min.js"></script>
-  <!-- <link rel="icon" href=""> -->
+  <link rel="icon" type="image/x-icon" href="https://learnify-datm.onrender.com/images/learnify.ico">
   <link rel="stylesheet" href="styles.css">
   <title>Learnify</title>
 </head>
@@ -295,7 +295,7 @@
         lessons: [],
         cart: [],
         order: [],
-        server: 'https://learnify-nk6r.onrender.com',
+        server: 'https://learnify-datm.onrender.com',
         currentFilter: "",
         currentSort: "ascending",
         searchQuery: "",
@@ -510,7 +510,7 @@
         isEmailValid() 
         {
           const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-          return email.Regex.test(this.user.email) && this.user.length > 0;
+          return emailRegex.test(this.user.email) && this.user.email.length > 0;
         },
 
         //function to check if the email is empty
