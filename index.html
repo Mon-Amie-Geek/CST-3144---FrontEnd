@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/vue@2.7.14/dist/vue.min.js"></script>
-  <link rel="icon" type="image/x-icon" href="https://learnify-datm.onrender.com/images/learnify.ico">
+  <link rel="icon" type="image/x-icon" href="https://learnify-datm.onrender.com\images\learnify.png">
   <link rel="stylesheet" href="styles.css">
   <title>Learnify</title>
 </head>
@@ -128,7 +128,7 @@
         <!-- STAGE 2 -->
         <div v-if="checkoutStage == 2" class="bg-white rounded-lg inline-flex flex-col items-center justify-center">
           <p class="text-2xl mx-16 mb-5 mt-16">Thank you for your order</p>
-          <img v-bind:src=`${server}/images/thankyou.png` class="h-20 w-20 my-5">
+          <img v-bind:src=`${server}/images/done.png` class="h-20 w-20 my-5">
 
           <button 
             @click="() => {checkout = false; checkoutStage = 0}"
