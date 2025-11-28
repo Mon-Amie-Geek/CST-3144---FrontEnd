@@ -357,7 +357,7 @@
           delete lesson.qty;
 
           //send the updated lesson to the backend using a PUT request
-          fetch(`${this.server}/lessons/${lessonID}`, {
+          fetch(`${this.server}/lessons/${lessonID}`.trim(), {
             method: 'PUT',
             headers: { "Content-Type": 'application/json' },
             body: JSON.stringify({lesson})
@@ -367,7 +367,7 @@
         //function to send order to the backend
 
         sendOrder() {
-          fetch(`${this.server}/order`, {
+          fetch(`${this.server}/order`.trim(), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(this.order)
@@ -449,7 +449,7 @@
 
         //function to fetch lessons based on the search query
         async fetchSearchedLessons() {
-          let response = await fetch(`${this.server}/search?q=${this.searchQuery.trim()}`,
+          let response = await fetch(`${this.server}/search?q=${this.searchQuery.trim()}`.trim(),
             {
               method: 'GET',
               headers: { 'Content-Type': 'application/json' }
