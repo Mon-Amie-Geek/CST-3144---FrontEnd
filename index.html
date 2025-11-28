@@ -389,7 +389,7 @@
 
           this.total -= lesson.price;
           //update the space of the lesson in the lessons array
-          this.lessons.find((item) => item.topic === lesson.toic).space +=1;
+          this.lessons.find((item) => item.topic === lesson.topic).space +=1;
         },
         /* function to add a lesson to the cart
          @param lesson: the lesson to be added to the cart
