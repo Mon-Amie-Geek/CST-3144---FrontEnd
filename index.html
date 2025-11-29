@@ -16,7 +16,7 @@
     <!-- MAIN SHOP VIEW -->
     <div v-if="checkout==false">
       <header>
-        <div class="bg-orange-900 flex justify-center text-center">
+        <div class="bg-yellow-700 flex justify-center text-center">
           <div class="flex items-center ml-14 mr-56">
             <p class="font-bold text-white text-2xl">Learnify</p>
           </div>
@@ -39,9 +39,9 @@
       <main class="flex flex-row">
 
         <!-- SIDEBAR -->
-        <div class="bg-red-950 inline-flex flex-col text-white min-h-full">
+        <div class="bg-rose-950 inline-flex flex-col text-white min-h-full">
 
-          <div class="bg-amber-900 text-center mt-10 mb-10 ml-5 mr-5 rounded-lg">
+          <div class="bg-amber-700 text-center mt-10 mb-10 ml-5 mr-5 rounded-lg">
             <p class="m-1 font-bold text-lg">Filters</p>
           </div>
 
@@ -67,7 +67,7 @@
             </label>
           </div>
 
-          <div class="bg-amber-900 text-center mt-10 mb-10 ml-5 mr-5 rounded-lg">
+          <div class="bg-amber-700 text-center mt-10 mb-10 ml-5 mr-5 rounded-lg">
             <p class="m-1 font-bold text-lg">Sort By</p>
           </div>
 
@@ -105,9 +105,9 @@
 
                 <button 
                   @click="addToCart(lesson)"
-                  class="p-3 bg-slate-500 rounded-full text-2xl font-bold h-10 w-10 flex items-center mr-5 hover:bg-slate-600 disabled:bg-gray-500"
+                  class="p-3 bg-green-200 rounded-full text-2xl font-bold h-10 w-10 flex items-center mr-5 hover:bg-green-700 disabled:bg-gray-500"
                   :disabled="lesson.space <= 0">
-                  <p class="relative bottom-0.5">+</p>
+                  <p>+</p>
                 </button>
 
               </div>
@@ -118,12 +118,12 @@
 
       </main>
 
-      <footer class="bg-orange-900 h-20"></footer>
+      <footer class="bg-yellow-700 h-20"></footer>
     </div>
 
     <!-- CHECKOUT VIEW -->
     <div v-if="checkout==true">
-      <main class="bg-yellow-700 h-screen flex items-center justify-center">
+      <main class="bg-orange-100 h-screen flex items-center justify-center">
 
         <!-- STAGE 2 -->
         <div v-if="checkoutStage == 2" class="bg-white rounded-lg inline-flex flex-col items-center justify-center">
@@ -165,7 +165,7 @@
 
             <button 
               @click="handleCheckout()"
-              class="text-sm bg-green-400 text-white rounded-sm py-1 font-bold hover:bg-slate-600 w-1/4">
+              class="text-sm bg-emerald-800 text-white rounded-sm py-1 font-bold hover:bg-green-300 w-1/4">
               Confirm
             </button>
           </div>
@@ -274,7 +274,7 @@
             <!-- CONFIRM -->
             <button 
               @click="checkoutStage++"
-              class="bg-green-500 text-white rounded-lg px-4 py-1 font-bold hover:bg-green-600 my-5 mx-24 w-1/2 disabled:bg-red-500"
+              class="bg-green-500 text-white rounded-lg px-4 py-1 font-bold hover:bg-green-600 my-5 mx-24 w-1/2 disabled:bg-red-700"
               :disabled="!canCheckout">
               Confirm Order
             </button>
